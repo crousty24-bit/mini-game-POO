@@ -17,4 +17,19 @@ class Player
       puts "Player #{@name} has been slayed by ennemy !"
     end
   end
+  def attacks(player)
+    puts "Player #{@name} attacks player #{player.name} !"
+    damage_points = compute_damage()
+    if damage_points == 6
+      damage_points = damage_points + 2
+      puts "It scores a Crit(+2 dmg) ! Attack inflict #{damage_points} damage !"
+      player.gets_damage(damage_points)
+    else
+      puts "Attack inflict #{damage_points} damage."
+      player.gets_damage(damage_points)
+    end
+  end
+  def compute_damage()
+    return rand(1..6)
+  end
 end
