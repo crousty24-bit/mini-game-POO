@@ -6,7 +6,9 @@ class Player
     @life_points = 10
   end
   def show_state()
-    puts "Player #{@name} has #{@life_points} HP left"
+    if @life_points > 0
+      puts "Player #{@name} has #{@life_points} HP left."
+    end
   end
   def gets_damage(damage_taken)
     @life_points = @life_points - damage_taken
