@@ -35,3 +35,51 @@ class Player
     return rand(1..6)
   end
 end
+
+class HumanPlayer < Player
+  attr_accessor :name, :life_points, :weapon_level
+  def initialize(name)
+    @name = name
+    @life_points = 100
+    @weapon_level = 1
+  end
+  def show_state()
+    if @life_points > 0
+      puts "Player #{@name} has #{@life_points} HP remaining."
+      puts "Weapon level : #{@weapon_level}"
+    end
+  end
+  def compute_damage()
+    return rand(1..6) * @weapon_level
+  end
+  def search_weapon()
+    found_weapon_lvl = rand(1..6)
+    puts "You have found a level #{found_weapon_lvl} weapon."
+    if found_weapon_lvl > @weapon_level
+      puts "+#{found_weapon_lvl - @weapon_level}lvl weapon upgrade"
+      @weapon_level = found_weapon_lvl
+      puts "Great ! A better one. You keep it !"
+    else 
+      puts "No luck, its a shitty weapon"
+    end
+  end
+  def search_health_pack()
+    found_health_pack = rand(1..6)
+    if found_health_pack == 1
+      puts "Nothing..."
+    elsif found_health_pack >= 2 && found_health_pack <= 5
+      @life_points = @life_points + 50
+      if @life_points > 100
+        @life_points = 100
+      end
+      puts "You have found one +50 health pack !"
+    else
+      @life_points = @life_points + 80
+      if @life_points > 100
+        @life_points = 100
+      end
+      puts "You have found one +80 health pack ! Sweet."
+    end
+  end
+end
+binding.pry
