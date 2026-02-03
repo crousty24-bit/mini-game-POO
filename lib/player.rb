@@ -16,7 +16,7 @@ class Player
       puts "Player #{@name} has taken #{damage_taken} damage !"
     end
     if @life_points <= 0
-      puts "Player #{@name} has been slayed by ennemy !"
+      puts "Player #{@name} has been slayed !"
     end
   end
   def attacks(player)
@@ -82,4 +82,3 @@ class HumanPlayer < Player
     end
   end
 end
-binding.pry
