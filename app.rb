@@ -4,6 +4,7 @@ Bundler.require
 require_relative 'lib/game'
 require_relative 'lib/player'
 
+# v1.0
 player1 = Player.new("Gork")
 player2 = Player.new("Sudo")
 
