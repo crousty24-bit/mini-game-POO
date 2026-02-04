@@ -6,7 +6,7 @@ class Player
     @life_points = 20
     possible_armor_values = [0, 5, 10, 20, 35]
     @armor_points = possible_armor_values.sample #random armor value for bots
-    possible_weapon_levels = [2..5]
+    possible_weapon_levels = [2, 3, 4]
     @weapon_level = possible_weapon_levels.sample
   end
   def show_state()
@@ -30,7 +30,7 @@ class Player
   def attacks(player)
     puts "Player #{@name} attacks player #{player.name} !"
     damage_points = compute_damage()
-    if damage_points == 6
+    if damage_points >= 18
       damage_points = damage_points * 2
       puts "It scores a Crit(double dmg) ! Attack inflict #{damage_points} damage !"
       player.gets_damage(damage_points)
