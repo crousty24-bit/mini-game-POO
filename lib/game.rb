@@ -10,7 +10,34 @@ class Game
     @players_left = @players_left - 1 #total change
   end
   def is_still_ongoing?()
-    return True if @human_player.life_points > 0 && @players_left >= 1
+    return @human_player.life_points > 0 && @players_left >= 1
+  end
+  def new_players_in_sight()
+    if @enemies_in_sight.length == @players_left
+      puts "All enemies already in sight."
+      return
+    end
+    dice = rand(1..6)
+    possibles_names = ["Gork", "Claude", "Sudo", "Vim", "Ruby", "Python", "Git", "Terminal",
+              "Bash", "Linux", "Docker", "Pixel", "Bug", "Root", "Echo", "Nano", "Java", "Kernel"]
+    if dice == 1
+      puts "No new enemy coming for now.."
+    elsif dice >= 2 && dice <= 4
+      random_name = possibles_names.sample
+      new_enemy = Player.new(random_name)
+      @enemies_in_sight << new_enemy
+      puts "Beware! A new enemy appears from the shadows !"
+      puts "#{new_enemy.name}"
+    else
+      random_name1 = possibles_names.sample
+      random_name2 = possibles_names.sample
+      new_enemy1 = Player.new(random_name1)
+      new_enemy2 = Player.new(random_name2)
+      @enemies_in_sight << new_enemy1
+      @enemies_in_sight << new_enemy2
+      puts "Watch out! 2 new enemies in sight !"
+      puts "#{new_enemy1.name} & #{new_enemy2.name}"
+    end
   end
   def show_players()
     puts "#{@human_player.show_state}"
@@ -21,31 +48,42 @@ class Game
     puts "Choose an action :"
     puts "a - search for a better weapon"
     puts "s - search for a health pack"
-    puts "1 - attack player1"
-      if player1.life_points <= 0
-        puts "Player1 dead."
-      else
-      puts player1.show_state
-      end
-    puts "2 - attack player2"
-      if player2.life_points <= 0
-        puts "Player2 dead."
-      else
-      puts player2.show_state
+    puts "attack enemy in sight"
+    @enemies_in_sight.each_with_index do |enemy, index|
+      puts "#{index}"
+      enemy.show_state
     end
-  puts "ENTER :"
-  action = gets.chomp
-  puts "------------------------------"
   end
-  def menu_choice(user_choice)
+  def menu_choice(action)
     if action == "a"
-      player_user.search_weapon
+      @human_player.search_weapon
     elsif action == "s"
-      player_user.search_health_pack
-    elsif action == "1"
-      player_user.attacks(player1)
-    elsif action == "2"
-      player_user.attacks(player2)
+      @human_player.search_health_pack
+    else
+      index = action.to_i
+      if index < @enemies_in_sight.length && index >= 0
+        enemy = @enemies_in_sight[index]
+        @human_player.attacks(enemy)
+        if enemy.life_points <= 0
+          kill_player(enemy)
+        end
+      else
+        puts "Invalid target or no enemy in sight !"
+      end
+    end
+  end
+  def enemies_attack()
+    puts "Enemy players will now attack !"
+    @enemies_in_sight.each do |enemy|
+      enemy.attacks(@human_player)
+    end
+  end
+  def end_game()
+    puts "------ GAME ENDED ------"
+    if @human_player.life_points > 0
+      puts "Congrats ! You are the last Dev standing."
+    else
+      puts "GameOver. You're dead.."
     end
   end
 end
