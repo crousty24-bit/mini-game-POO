@@ -25,4 +25,4 @@ while player1.life_points > 0 && player2.life_points > 0
   end
   puts "#{player2.show_state()}"
 end
-binding.pry
+#binding.pry

@@ -76,4 +76,4 @@ if player_user.life_points > 0
 else
   puts "GameOver. You're dead.."
 end
-binding.pry
+#binding.pry
