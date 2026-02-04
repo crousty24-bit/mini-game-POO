@@ -3,15 +3,15 @@ class Player
   attr_accessor :name, :life_points, :armor_points, :weapon_level
   def initialize(name)
     @name = name
-    @life_points = 20
-    possible_armor_values = [0, 5, 10, 20, 35]
+    @life_points = 10
+    possible_armor_values = [0, 5, 10, 20]
     @armor_points = possible_armor_values.sample #random armor value for bots
-    possible_weapon_levels = [2, 3, 4]
+    possible_weapon_levels = [1, 2, 3, 4]
     @weapon_level = possible_weapon_levels.sample
   end
   def show_state()
     if @life_points > 0
-      puts "Player #{@name} | #{@life_points}/20 HP | #{@armor_points}/50 Armor | Weapon LvL: #{@weapon_level}."
+      puts "Player #{@name} | #{@life_points}/10 HP | #{@armor_points}/20 Armor | Weapon LvL: #{@weapon_level}."
     end
   end
   def gets_damage(damage_received)
@@ -45,24 +45,50 @@ class Player
 end
 
 class HumanPlayer < Player
-  attr_accessor :name, :life_points, :weapon_level
+  attr_accessor :name, :life_points, :weapon_level, :shield_level
   def initialize(name)
     super(name)
     @life_points = 100
     @weapon_level = 1
-    @armor_points = 0
+    @armor_points = 5
+    @shield_level = 1
   end
 
   def show_state()
     if @life_points > 0
       puts "Player #{@name} | #{@life_points}/100 HP."
       puts "Weapon LvL: #{@weapon_level} (max10)."
-      puts "#{@armor_points}/50 Armor."
+      puts "#{@armor_points}/40 Armor."
+      puts "Shield LvL: #{@shield_level} (max5)."
     end
   end
 
   def compute_damage()
     return rand(1..6) * @weapon_level
+  end
+
+  def gets_damage(damage_received)
+    block_roll = rand(1..6)
+    if block_roll <= @shield_level
+      puts "--------------------------------------------------"
+      puts "CRITICAL BLOCK ! #{@name} successfuly blocked incoming attack with his Shield !"
+      puts "0 damage taken."
+      puts "--------------------------------------------------"
+      return
+    end
+    super(damage_received)
+  end
+
+  def search_shield()
+    found_shield_lvl = rand(1..5)
+    puts "You have found a level #{found_shield_lvl} shield."
+    if found_shield_lvl > @shield_level
+      puts "+#{found_shield_lvl - @shield_level} lvl shield upgrade."
+      @shield_level = found_shield_lvl
+      puts "Great ! A solid one. You keep it !"
+    else 
+      puts "No luck, this one is trash."
+    end
   end
 
   def search_armor()
@@ -72,20 +98,20 @@ class HumanPlayer < Player
     elsif dice == 2
       puts "You have found small armor plate (+5 armor)."
       @armor_points = @armor_points + 5
-      if @armor_points > 50
-        @armor_points = 50
+      if @armor_points > 40
+        @armor_points = 40
       end
     elsif dice >= 3 && dice <= 5
       puts "You have found thick armor plate (+10 armor)."
       @armor_points = @armor_points + 10
-      if @armor_points > 50
-        @armor_points = 50
+      if @armor_points > 40
+        @armor_points = 40
       end
     else
       puts "You have found mighty armor plate (+20 armor)."
       @armor_points = @armor_points + 20
-      if @armor_points > 50
-        @armor_points = 50
+      if @armor_points > 40
+        @armor_points = 40
       end
     end
     puts "You have now #{@armor_points} armor points !"
