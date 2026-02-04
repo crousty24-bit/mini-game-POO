@@ -1,8 +1,9 @@
 require 'bundler'
 Bundler.require
 
-require_relative 'lib/game'
-require_relative 'lib/player'
+$:.unshift File.expand_path("./../lib", __FILE__)
+require 'game'
+require 'player'
 
 # v3.0
 puts "------------------------------------------------"
