@@ -3,7 +3,7 @@ class Player
   attr_accessor :name, :life_points, :armor_points
   def initialize(name)
     @name = name
-    @life_points = 10
+    @life_points = 20
     possible_armor_values = [0, 5, 10, 20, 35]
     @armor_points = possible_armor_values.sample #random armor value for bots
   end
@@ -29,8 +29,8 @@ class Player
     puts "Player #{@name} attacks player #{player.name} !"
     damage_points = compute_damage()
     if damage_points == 6
-      damage_points = damage_points + 2
-      puts "It scores a Crit(+2 dmg) ! Attack inflict #{damage_points} damage !"
+      damage_points = damage_points * 2
+      puts "It scores a Crit(double dmg) ! Attack inflict #{damage_points} damage !"
       player.gets_damage(damage_points)
     else
       puts "Attack inflict #{damage_points} damage."
@@ -90,7 +90,7 @@ class HumanPlayer < Player
   end
 
   def search_weapon()
-    found_weapon_lvl = rand(1..6)
+    found_weapon_lvl = rand(1..10)
     puts "You have found a level #{found_weapon_lvl} weapon."
     if found_weapon_lvl > @weapon_level
       puts "+#{found_weapon_lvl - @weapon_level} lvl weapon upgrade."
