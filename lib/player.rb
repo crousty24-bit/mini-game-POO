@@ -1,19 +1,25 @@
 require 'pry'
 class Player
-  attr_accessor :name, :life_points
+  attr_accessor :name, :life_points, :armor_points
   def initialize(name)
     @name = name
     @life_points = 10
+    possible_armor_values = [0, 5, 10, 20, 35]
+    @armor_points = possible_armor_values.sample #random armor value for bots
   end
   def show_state()
     if @life_points > 0
-      puts "Player #{@name} has #{@life_points} HP left."
+      puts "Player #{@name} has #{@life_points} HP left and #{@armor_points} armor points."
     end
   end
-  def gets_damage(damage_taken)
-    @life_points = @life_points - damage_taken
+  def gets_damage(damage_received)
+    final_damage = damage_received - @armor_points #armor reduce damage received
+    if final_damage < 0 #condition to not get negative value
+      final_damage = 0
+    end
+    @life_points = @life_points - final_damage
     if @life_points > 0 
-      puts "Player #{@name} has taken #{damage_taken} damage !"
+      puts "Player #{@name} has taken #{final_damage} damage !"
     end
     if @life_points <= 0
       puts "Player #{@name} has been slayed !"
@@ -39,35 +45,67 @@ end
 class HumanPlayer < Player
   attr_accessor :name, :life_points, :weapon_level
   def initialize(name)
-    @name = name
+    super(name)
     @life_points = 100
     @weapon_level = 1
+    @armor_points = 5
   end
+
   def show_state()
     if @life_points > 0
       puts "Player #{@name} has #{@life_points} HP remaining."
-      puts "Weapon level : #{@weapon_level}"
+      puts "Weapon level : #{@weapon_level}."
+      puts "Armor points : #{@armor_points}/50."
     end
   end
+
   def compute_damage()
     return rand(1..6) * @weapon_level
   end
+
+  def search_armor()
+    dice = rand(1..6)
+    if dice == 1
+      puts "Nothing..."
+    elsif dice == 2
+      puts "You have found small armor plate (+5 armor)."
+      @armor_points = @armor_points + 5
+      if @armor_points > 50
+        @armor_points = 50
+      end
+    elsif dice >= 3 && dice <= 5
+      puts "You have found thick armor plate (+10 armor)."
+      @armor_points = @armor_points + 10
+      if @armor_points > 50
+        @armor_points = 50
+      end
+    else
+      puts "You have found mighty armor plate (+20 armor)."
+      @armor_points = @armor_points + 20
+      if @armor_points > 50
+        @armor_points = 50
+      end
+    end
+    puts "You have now #{@armor_points} armor points !"
+  end
+
   def search_weapon()
     found_weapon_lvl = rand(1..6)
     puts "You have found a level #{found_weapon_lvl} weapon."
     if found_weapon_lvl > @weapon_level
-      puts "+#{found_weapon_lvl - @weapon_level}lvl weapon upgrade"
+      puts "+#{found_weapon_lvl - @weapon_level} lvl weapon upgrade."
       @weapon_level = found_weapon_lvl
       puts "Great ! A better one. You keep it !"
     else 
-      puts "No luck, its a shitty weapon"
+      puts "No luck, its a shitty weapon."
     end
   end
+
   def search_health_pack()
-    found_health_pack = rand(1..6)
-    if found_health_pack == 1
+    dice = rand(1..6)
+    if dice == 1
       puts "Nothing..."
-    elsif found_health_pack >= 2 && found_health_pack <= 5
+    elsif dice >= 2 && dice <= 5
       @life_points = @life_points + 50
       if @life_points > 100
         @life_points = 100
@@ -82,3 +120,4 @@ class HumanPlayer < Player
     end
   end
 end
+binding.pry
