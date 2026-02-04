@@ -48,6 +48,7 @@ class Game
     puts "Choose an action :"
     puts "a - search for a better weapon"
     puts "s - search for a health pack"
+    puts "d - search for armor piece"
     puts "attack enemy in sight"
     @enemies_in_sight.each_with_index do |enemy, index|
       puts "#{index}"
@@ -59,6 +60,8 @@ class Game
       @human_player.search_weapon
     elsif action == "s"
       @human_player.search_health_pack
+    elsif action == "d"
+      @human_player.search_armor
     else
       index = action.to_i
       if index < @enemies_in_sight.length && index >= 0
