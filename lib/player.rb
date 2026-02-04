@@ -1,11 +1,13 @@
 require 'pry'
 class Player
-  attr_accessor :name, :life_points, :armor_points
+  attr_accessor :name, :life_points, :armor_points, :weapon_level
   def initialize(name)
     @name = name
     @life_points = 20
     possible_armor_values = [0, 5, 10, 20, 35]
     @armor_points = possible_armor_values.sample #random armor value for bots
+    possible_weapon_levels = [2..5]
+    @weapon_level = possible_weapon_levels.sample
   end
   def show_state()
     if @life_points > 0
@@ -38,7 +40,7 @@ class Player
     end
   end
   def compute_damage()
-    return rand(1..6)
+    return rand(1..6) * @weapon_level
   end
 end
 
@@ -48,7 +50,7 @@ class HumanPlayer < Player
     super(name)
     @life_points = 100
     @weapon_level = 1
-    @armor_points = 5
+    @armor_points = 0
   end
 
   def show_state()
@@ -120,4 +122,4 @@ class HumanPlayer < Player
     end
   end
 end
-binding.pry
+#binding.pry
