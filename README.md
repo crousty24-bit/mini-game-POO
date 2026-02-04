@@ -4,12 +4,12 @@ A turn-based combat game written in Ruby demonstrating Object-Oriented Programmi
 
 ## Description
 
-Mini Game POO is a text-based arena battle simulator where players face off in combat. The game implements different player types with distinct characteristics:
+Mini Game POO is a text-based arena battle simulator with multiple game versions showcasing different complexity levels of game design. The full v3.0 implementation features:
 
-- **Standard Player**: Basic 10 HP with standard 1-6 damage per attack
-- **Human Player**: 100 HP with weapon progression, health pack discovery, and enhanced damage scaling
-
-Players take turns attacking each other with random damage values. Human players have access to special mechanics like weapon upgrades and health recovery items.
+- **Dynamic Enemy System**: Enemies spawn randomly during gameplay with 10 different NPC names
+- **Interactive Menu**: Player-driven combat with weapon/health search options
+- **Progressive Difficulty**: All enemies must be defeated to win (10 total enemies to clear)
+- **Multiple Game Modes**: 3 versions from simple 1v1 duel to full arena battles
 
 ## Requirements
 
@@ -31,31 +31,51 @@ bundle install
 
 ## Usage
 
-Run the basic game version:
+Run v1.0 (basic game with two fixed players):
 ```bash
 ruby app.rb
 ```
 
-Run the alternative game version:
+Run v2.0 (player vs two fixed enemies):
 ```bash
 ruby app_2.rb
+```
+
+Run v3.0 (full arena battle with dynamic enemies and menu system):
+```bash
+ruby app_3.rb
 ```
 
 ## Project Structure
 
 ```
 mini-game-POO/
-├── app.rb              # Main game entry point (v1.0)
-├── app_2.rb            # Alternative game version
+├── app.rb              # Main game entry point (v1.0 - simple duel)
+├── app_2.rb            # Alternative game version (v2.0 - vs two fixed enemies)
+├── app_3.rb            # Arena battle version (v3.0 - dynamic enemies with menu)
 ├── Gemfile             # Ruby dependencies
 ├── lib/
-│   ├── game.rb         # Game logic (empty - ready for expansion)
+│   ├── game.rb         # Game logic (v3.0 - arena battle system)
 │   └── player.rb       # Player classes and combat mechanics
 └── spec/
     └── spec_helper.rb  # Test configuration
 ```
 
 ## Game Mechanics
+
+### v1.0: Simple Duel
+- Two fixed players battle until one dies
+- Basic turn-based combat system
+
+### v2.0: Player vs Two Enemies
+- Human player with special mechanics battles two fixed enemy players
+- Menu-driven player actions (search weapon, search health pack, attack)
+
+### v3.0: Arena Battle System
+- Player enters an arena and fights against multiple dynamic enemies
+- Enemies spawn randomly (0-2 per turn) from a pool of 10 opponents
+- Interactive menu system with weapon/health search and target selection
+- Game continues until either the player dies or all enemies are defeated
 
 ### Combat System
 - Players alternate turns attacking each other
@@ -101,15 +121,25 @@ The project follows Object-Oriented Programming principles:
 - **Encapsulation**: Private state (life_points, weapon_level) with accessor methods
 - **Polymorphism**: Method overriding for `compute_damage()` and `show_state()`
 - **Modularity**: Player classes separated in `lib/player.rb`
+- **Game Logic**: Arena battle system encapsulated in `Game` class with enemy management and turn-based control
+
+### Game Class (v3.0)
+The `Game` class manages:
+- Human player creation and state
+- Enemy spawning and management (`enemies_in_sight` array)
+- Turn-based game loop control (`is_still_ongoing?`)
+- Player action menu and processing
+- Enemy turn management
+- Game end state determination
 
 ## Future Enhancements
 
-- Implement expanded v3.0 game logic in `lib/game.rb`
-- More enemies per game
-- Add additional player types and abilities
-- Implement special moves or power-ups
-- Create difficulty levels
-- Add persistent player statistics
+- Add more enemy types with special abilities
+- Implement difficulty levels
+- Add persistent player statistics and leaderboards
+- Create power-up system beyond weapons and health
+- Implement special moves or ultimate abilities
+- Add visual improvements and animations
 
 ## License
 
