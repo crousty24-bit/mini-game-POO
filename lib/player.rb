@@ -11,7 +11,7 @@ class Player
   end
   def show_state()
     if @life_points > 0
-      puts "Player #{@name} has #{@life_points} HP left and #{@armor_points} armor points."
+      puts "Player #{@name} | #{@life_points}/20 HP | #{@armor_points}/50 Armor | Weapon LvL: #{@weapon_level}."
     end
   end
   def gets_damage(damage_received)
@@ -55,9 +55,9 @@ class HumanPlayer < Player
 
   def show_state()
     if @life_points > 0
-      puts "Player #{@name} has #{@life_points} HP remaining."
-      puts "Weapon level : #{@weapon_level}."
-      puts "Armor points : #{@armor_points}/50."
+      puts "Player #{@name} | #{@life_points}/100 HP."
+      puts "Weapon LvL: #{@weapon_level} (max10)."
+      puts "#{@armor_points}/50 Armor."
     end
   end
 
