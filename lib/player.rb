@@ -4,14 +4,17 @@ class Player
   def initialize(name)
     @name = name
     @life_points = 10
+    @max_life_points = 10
     possible_armor_values = [0, 5, 10, 20]
     @armor_points = possible_armor_values.sample #random armor value for bots
+    @max_armor_points = 20
     possible_weapon_levels = [1, 2, 3, 4]
     @weapon_level = possible_weapon_levels.sample
+    @max_weapon_level = 4
   end
   def show_state()
     if @life_points > 0
-      puts "Player #{@name} | #{@life_points}/10 HP | #{@armor_points}/20 Armor | Weapon LvL: #{@weapon_level}."
+      puts "Player #{@name} | HP: #{@life_points}/#{@max_life_points} | Armor: #{@armor_points}/#{@max_armor_points} | Weapon LvL: #{@weapon_level}/#{@max_weapon_level}."
     end
   end
   def gets_damage(damage_received)
@@ -49,17 +52,21 @@ class HumanPlayer < Player
   def initialize(name)
     super(name)
     @life_points = 100
+    @max_life_points = 100
     @weapon_level = 1
+    @max_weapon_level = 10
     @armor_points = 5
+    @max_armor_points = 45
     @shield_level = 1
+    @max_shield_level = 5
   end
 
   def show_state()
     if @life_points > 0
-      puts "Player #{@name} | #{@life_points}/100 HP."
-      puts "Weapon LvL: #{@weapon_level} (max10)."
-      puts "#{@armor_points}/40 Armor."
-      puts "Shield LvL: #{@shield_level} (max5)."
+      puts "Player #{@name} | HP: #{@life_points}/#{@max_life_points}."
+      puts "Weapon LvL: #{@weapon_level}/#{@max_weapon_level}."
+      puts "Armor: #{@armor_points}/#{@max_armor_points}."
+      puts "Shield LvL: #{@shield_level}/#{@max_shield_level}."
     end
   end
 
@@ -135,14 +142,14 @@ class HumanPlayer < Player
       puts "Nothing..."
     elsif dice >= 2 && dice <= 5
       @life_points = @life_points + 50
-      if @life_points > 100
-        @life_points = 100
+      if @life_points > @max_life_points
+        @life_points = @max_life_points
       end
       puts "You have found one +50 health pack !"
     else
       @life_points = @life_points + 80
-      if @life_points > 100
-        @life_points = 100
+      if @life_points > @max_life_points
+        @life_points = @max_life_points
       end
       puts "You have found one +80 health pack ! Sweet."
     end
