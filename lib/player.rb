@@ -12,38 +12,48 @@ class Player
     @weapon_level = possible_weapon_levels.sample
     @max_weapon_level = 4
   end
+
+# Player Bot Stats #
+# -----------------#
   def show_state()
     if @life_points > 0
       puts "Player #{@name} | HP: #{@life_points}/#{@max_life_points} | Armor: #{@armor_points}/#{@max_armor_points} | Weapon LvL: #{@weapon_level}/#{@max_weapon_level}."
     end
   end
-  def gets_damage(damage_received)
-    final_damage = damage_received - @armor_points #armor reduce damage received
+
+# Player Attack Pipline Sequence #
+# -------------------------------#
+  def attacks(player)
+    puts "Player #{@name} attacks player #{player.name} !"
+    damage = compute_damage
+    puts "Attack inflicts #{damage} damage."
+    player.take_hit(damage)
+  end
+
+  def compute_damage
+    roll = rand(1..6)
+    damage = roll * @weapon_level
+    if damage >= 18 #crit damage
+      damage *= 2
+    end
+    return damage
+  end
+
+  def gets_damage(final_damage)
+    @life_points -= final_damage
+  end
+
+  def take_hit(damage_received)
+    final_damage = damage_received
     if final_damage < 0 #condition to not get negative value
       final_damage = 0
     end
-    @life_points = @life_points - final_damage
+    gets_damage(final_damage)
     if @life_points > 0 
       puts "Player #{@name} has taken #{final_damage} damage !"
-    end
-    if @life_points <= 0
+    else @life_points <= 0
       puts "Player #{@name} has been slayed !"
     end
-  end
-  def attacks(player)
-    puts "Player #{@name} attacks player #{player.name} !"
-    damage_points = compute_damage()
-    if damage_points >= 18
-      damage_points = damage_points * 2
-      puts "It scores a Crit(double dmg) ! Attack inflict #{damage_points} damage !"
-      player.gets_damage(damage_points)
-    else
-      puts "Attack inflict #{damage_points} damage."
-      player.gets_damage(damage_points)
-    end
-  end
-  def compute_damage()
-    return rand(1..6) * @weapon_level
   end
 end
 
