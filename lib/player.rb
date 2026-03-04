@@ -44,14 +44,20 @@ class Player
   end
 
   def take_hit(damage_received)
-    final_damage = damage_received
-    if final_damage < 0 #condition to not get negative value
-      final_damage = 0
+    if damage_received < 0 #clamp to prevent negative value
+      damage_received = 0
     end
-    gets_damage(final_damage)
+    absorbed = [damage_received, @armor_points].min
+    @armor_points -= absorbed #calculate new armor value after absorbtion
+    if @armor_points < 0 #clamp to prevent negative value
+      @armor_points = 0
+    end
+    remaining_damage = damage_received - absorbed #get real remaining damage after modifiers
+    gets_damage(remaining_damage)
     if @life_points > 0 
-      puts "Player #{@name} has taken #{final_damage} damage !"
-    else @life_points <= 0
+      puts "Player #{@name} has taken #{remaining_damage} damage !"
+      puts "Absorbed #{absorbed} by armor. Now Armor: #{@armor_points}."
+    elsif @life_points <= 0
       puts "Player #{@name} has been slayed !"
     end
   end
