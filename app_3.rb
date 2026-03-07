@@ -7,7 +7,7 @@ require 'player'
 
 # v3.0
 puts "------------------------------------------------"
-puts "|         Welcome to THP Battle Arena.         |"
+puts "|         Welcome to THP Battle Arena.         |".colorize(:green)
 puts "|     Last Dev standing is the winner, yay!    |"
 puts "-------------------------------------------------"
 
