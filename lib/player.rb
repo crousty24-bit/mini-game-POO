@@ -86,15 +86,14 @@ class HumanPlayer < Player
     end
   end
 
-  def compute_damage()
-    return rand(1..6) * @weapon_level
-  end
-
-  def gets_damage(damage_received)
+# HumanPlayer Attack Pipline Sequence #
+# Add first Defensive stat block-shield #
+# -------------------------------#
+  def take_hit(damage_received)
     block_roll = rand(1..6)
     if block_roll <= @shield_level
       puts "--------------------------------------------------"
-      puts "CRITICAL BLOCK ! #{@name} successfuly blocked incoming attack with his Shield !"
+      puts "CRITICAL BLOCK ! #{@name} successfully blocked incoming attack with his Shield !"
       puts "0 damage taken."
       puts "--------------------------------------------------"
       return
@@ -102,6 +101,8 @@ class HumanPlayer < Player
     super(damage_received)
   end
 
+# HumanPlayer Actions #
+# -------------------------------#
   def search_shield()
     found_shield_lvl = rand(1..5)
     puts "You have found a level #{found_shield_lvl} shield."
