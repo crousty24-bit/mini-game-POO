@@ -81,20 +81,23 @@ class Game
 
   def enemies_attack
     puts "Enemy players will now attack !"
+    targets = {}
     @enemies_in_sight.each do |enemy|
-      if enemy.life_points > 0
+      next if enemy.life_points <= 0 #prevent dead bot from attacking
       rng = rand(1..100)
         if @human_player.life_points > 0 && rng <= 50
-          enemy.attacks(@human_player)
+          targets[enemy] = (@human_player)
         else
           possible_targets = @enemies_in_sight.select do |bot|
             bot.life_points > 0 && bot != enemy
           end
           if possible_targets.any?
-            enemy.attacks(possible_targets.sample)
+            targets[enemy] = (possible_targets.sample)
           end
         end
-      end
+    end
+    targets.each do |enemy, target|
+      enemy.attacks(target)
     end
     dead = @enemies_in_sight.select {|bot| bot.life_points <= 0} #select every dead bots
     @players_left = @players_left - dead.length #total change
