@@ -78,12 +78,29 @@ class Game
       end
     end
   end
-  def enemies_attack()
+
+  def enemies_attack
     puts "Enemy players will now attack !"
     @enemies_in_sight.each do |enemy|
-      enemy.attacks(@human_player)
+      if enemy.life_points > 0
+      rng = rand(1..100)
+        if @human_player.life_points > 0 && rng <= 50
+          enemy.attacks(@human_player)
+        else
+          possible_targets = @enemies_in_sight.select do |bot|
+            bot.life_points > 0 && bot != enemy
+          end
+          if possible_targets.any?
+            enemy.attacks(possible_targets.sample)
+          end
+        end
+      end
     end
+    dead = @enemies_in_sight.select {|bot| bot.life_points <= 0} #select every dead bots
+    @players_left = @players_left - dead.length #total change
+    @enemies_in_sight.reject! {|bot| bot.life_points <= 0} #clean variable
   end
+
   def end_game()
     puts "------ GAME ENDED ------"
     if @human_player.life_points > 0
