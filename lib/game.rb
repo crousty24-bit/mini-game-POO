@@ -6,43 +6,49 @@ class Game
     @enemies_in_sight = []
   end
   def kill_player(player)
-    @enemies_in_sight.delete(player) #remove player when killed
-    @players_left = @players_left - 1 #total change
+    @enemies_in_sight.delete(player) #remove bot player when killed
+    @players_left = @players_left - 1 #update total change
   end
-  def is_still_ongoing?()
+  def is_still_ongoing?
     return @human_player.life_points > 0 && @players_left >= 1
   end
-  def new_players_in_sight()
+
+# Refacto : add new players in sight #
+  def new_players_in_sight
     if @enemies_in_sight.length == @players_left
       puts "All enemies already in sight."
       return
     end
     dice = rand(1..6)
-    possibles_names = ["Gork", "Claude", "Sudo", "Vim", "Ruby", "Python", "Git", "Terminal",
-              "Bash", "Linux", "Docker", "Pixel", "Bug", "Root", "Echo", "Nano", "Java", "Kernel"]
+    spawn_count =
     if dice == 1
       puts "No new enemy coming for now.."
-    elsif dice >= 2 && dice <= 4
-      random_name = possibles_names.sample
-      new_enemy = Player.new(random_name)
-      @enemies_in_sight << new_enemy
+      0
+    elsif dice <= 4
       puts "Beware! A new enemy appears from the shadows !"
-      puts "#{new_enemy.name}"
+      1
     else
-      random_name1 = possibles_names.sample
-      random_name2 = possibles_names.sample
-      new_enemy1 = Player.new(random_name1)
-      new_enemy2 = Player.new(random_name2)
-      @enemies_in_sight << new_enemy1
-      @enemies_in_sight << new_enemy2
       puts "Watch out! 2 new enemies in sight !"
-      puts "#{new_enemy1.name} & #{new_enemy2.name}"
+      2
+    end
+    spawn_count = [spawn_count, @players_left].min
+    possible_names = ["Gork", "Claude", "Sudo", "Vim", "Ruby", "Python", "Git", "Terminal",
+              "Bash", "Linux", "Docker", "Pixel", "Bug", "Root", "Echo", "Nano", "Java", "Kernel"]
+    spawn_count.times do
+      name = possible_names.sample
+      new_enemy = Player.new(name)
+      @enemies_in_sight << new_enemy
+      @players_left -= 1
+      puts "Enemy Player: #{name}"
     end
   end
-  def show_players()
-    puts "#{@human_player.show_state}"
-    puts "Only #{@players_left} players left !"
+
+  def show_players
+    @human_player.show_state
+    puts "Only #{@players_left} enemies remaining !"
+    puts "Currently in sight : #{@enemies_in_sight.length}"
   end
+  
   def menu()
     puts "------------------------------"
     puts "Choose an action :"
@@ -79,6 +85,8 @@ class Game
     end
   end
 
+# Bot targeting & attack Sequence #
+# --------------------------------#
   def enemies_attack
     puts "Enemy players will now attack !"
     targets = {}
